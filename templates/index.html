@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A* Pathfinding Visualization</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container py-4">
+        <header class="mb-4">
+            <h1 class="text-center">A* Pathfinding Algorithm Visualization</h1>
+        </header>
+
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body" id="canvas-container">
+                        <canvas id="pathfindingCanvas" class="mx-auto d-block"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Controls</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button id="startButton" class="btn btn-primary">Start Algorithm</button>
+                            <button id="resetButton" class="btn btn-secondary">Reset Grid</button>
+                            <button id="clearPathButton" class="btn btn-info">Clear Path</button>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <p class="fw-bold">Drawing Tools:</p>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="drawingTool" id="startPointTool" value="start" checked>
+                                <label class="form-check-label" for="startPointTool">
+                                    <span class="color-legend start-point"></span> Start Point
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="drawingTool" id="endPointTool" value="end">
+                                <label class="form-check-label" for="endPointTool">
+                                    <span class="color-legend end-point"></span> End Point
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="drawingTool" id="barrierTool" value="barrier">
+                                <label class="form-check-label" for="barrierTool">
+                                    <span class="color-legend barrier"></span> Wall/Barrier
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="drawingTool" id="eraserTool" value="eraser">
+                                <label class="form-check-label" for="eraserTool">
+                                    <span class="color-legend eraser"></span> Eraser
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <label for="gridSizeSelect" class="form-label">Grid Size:</label>
+                            <select class="form-select" id="gridSizeSelect">
+                                <option value="10">10 x 10</option>
+                                <option value="15">15 x 15</option>
+                                <option value="25" selected>25 x 25</option>
+                                <option value="40">40 x 40</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Legend</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend start-point me-2"></span>
+                            <span>Start Node</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend end-point me-2"></span>
+                            <span>End Node</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend barrier me-2"></span>
+                            <span>Wall/Barrier</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend unvisited me-2"></span>
+                            <span>Unvisited Node</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend visited me-2"></span>
+                            <span>Visited Node</span>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="color-legend open me-2"></span>
+                            <span>Open Node (To Visit)</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="color-legend path me-2"></span>
+                            <span>Path Node</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Instructions</h5>
+            </div>
+            <div class="card-body">
+                <ol class="mb-0">
+                    <li>Select a drawing tool from the control panel.</li>
+                    <li>Place a start point (green) and end point (yellow) on the grid.</li>
+                    <li>Draw walls/barriers (black) to block paths.</li>
+                    <li>Click "Start Algorithm" to visualize the A* pathfinding process.</li>
+                    <li>Use "Reset Grid" to clear everything or "Clear Path" to keep walls but remove the path.</li>
+                    <li>Right-click or use the Eraser tool to remove nodes.</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5>About A* Pathfinding</h5>
+            </div>
+            <div class="card-body">
+                <p>A* (pronounced "A-star") is a popular pathfinding algorithm used in computer science and artificial intelligence. It efficiently plots the shortest path between two points by:</p>
+                <ul>
+                    <li><strong>f(n) = g(n) + h(n)</strong>: A* uses this formula to evaluate each node</li>
+                    <li><strong>g(n)</strong>: Cost from start node to current node</li>
+                    <li><strong>h(n)</strong>: Heuristic (estimated distance) from current node to goal</li>
+                    <li>A* explores nodes with the lowest f-score first, making it both optimal and efficient</li>
+                </ul>
+                <p>The visualization shows:</p>
+                <ul>
+                    <li><span class="badge bg-primary">Blue</span> nodes in the open set (to be evaluated)</li>
+                    <li><span class="badge bg-danger">Red</span> nodes in the closed set (already evaluated)</li>
+                    <li><span class="badge bg-secondary">Grey</span> nodes in the final path once found</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/pathfinder.js') }}"></script>
+</body>
+</html>

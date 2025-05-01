@@ -1,0 +1,66 @@
+/* Canvas styling */
+#pathfindingCanvas {
+    border: 1px solid var(--bs-border-color);
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    height: auto;
+}
+
+#canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+/* Color legends */
+.color-legend {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.color-legend.start-point {
+    background-color: #00FF00; /* GREEN */
+}
+
+.color-legend.end-point {
+    background-color: #FFFF00; /* YELLOW */
+}
+
+.color-legend.barrier {
+    background-color: #000000; /* BLACK */
+}
+
+.color-legend.unvisited {
+    background-color: #FFFFFF; /* WHITE */
+    border: 1px solid var(--bs-border-color);
+}
+
+.color-legend.visited {
+    background-color: #FF9999; /* RED */
+}
+
+.color-legend.open {
+    background-color: #99CCFF; /* BLUE */
+}
+
+.color-legend.path {
+    background-color: #808080; /* GREY */
+}
+
+.color-legend.eraser {
+    background-color: #FFFFFF; /* WHITE */
+    border: 1px solid var(--bs-border-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #pathfindingCanvas {
+        width: 100%;
+        height: auto;
+    }
+}
